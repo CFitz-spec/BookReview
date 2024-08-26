@@ -1,0 +1,37 @@
+<%- include("partials/header.ejs") %>
+<main>
+<% if (locals.review){%>
+    <!--
+    So this part was simple but took me a while. 
+    Initally, I was going to have each part have an edit button next to it. 
+    But then this proved to be a bit weak. 
+    So, I made a change, instead of having all the editing on this page, I just redirected this back to the create page with all the form data again. 
+    Essentially, a back button.
+    -->
+    <div class="review-container">
+                <div class="main-container">
+                    <img src="https://covers.openlibrary.org/b/isbn/<%=review.isbn%>-M.jpg">
+                    <h2><%=review.title%></h2>
+                    <p><%-review.review_blog.replace(/\r\n/g, '<br>')%></p>
+                    <p>Score: <%=review.review_score%>/10</p>
+                </div>
+    <div class="edit-publish">
+                <form class="review-form" action="/edit" method="post">
+        <input type="hidden" name="title" value="<%=review.title%>">
+        <input type="hidden" name="isbn" value="<%=review.isbn%>">
+        <input type="hidden" name="review_blog" value="<%-review.review_blog%>">
+        <input type="hidden" name="review_score" value="<%=review.review_score%>">
+        <button type="submit" name="Edit" value="Edit"><img src="/svg/edit.svg" alt="Edit Button" class="icon">Edit</button>
+    </form>
+    <form action="/publish" method="post">
+        <input type="hidden" name="title" value="<%=review.title%>">
+        <input type="hidden" name="isbn" value="<%=review.isbn%>">
+        <input type="hidden" name="review_blog" value="<%-review.review_blog%>">
+        <input type="hidden" name="review_score" value="<%=review.review_score%>">
+        <button type="submit" name="Publish" value="Publish"><img src="/svg/done.svg" alt="Done Button" class="icon">Done</button>
+    </form>
+    </div>
+</div>
+    <%}%>
+</main>
+<%- include("partials/footer.ejs") %>

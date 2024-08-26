@@ -1,0 +1,69 @@
+<%- include("partials/header.ejs") %>
+
+<!--
+What I want to do here is. 
+Have a simple form section to fill in the details.
+Then, have a review part before I publish the review.
+Finally, publish the review. 
+
+Extras. Do I want a fancy text editor? I could use Tiny MCE.
+Although, I've already got some review banked that haven't used that editor.
+// Do I really need it? I'm going to pass. 
+-->
+
+<!-- Slightly confusing here
+ First
+ Checks if this there is data to be edited within the if condition
+ If there is 
+ Adds this data to the fields so the user can edit
+ Otherwise starts an empty form for the user to fill in to make a review. 
+ -->
+<main>
+<div class="create-container">
+    <% if (locals.review){ %>
+        <div class="create">
+            <form action="/review" method="post">
+                <label for="title"><h2>Title</h2></label>
+                <input type="text" name="title" value="<%=review.title%>" id="create-title" required autocomplete="off">
+                <label for="isbn"><h2>ISBN</h2></label>
+                <input type="text" name="isbn" value="<%=review.isbn%>" id="create-isbn" required autocomplete="off">
+                <label for="review_blog"><h2>Review</h2></label>
+                <textarea name="review_blog" id="create-review_blog" required autocomplete="off"><%-review.review_blog%></textarea>
+                <label for="review_score"><h2>Review score</h2></label>
+                <input type="number" name="review_score" min="00" max="10" pattern="[0-9]{2}" value="<%=review.review_score%>" id="create-review_score" required autocomplete="off">
+                <input type="submit" value="Proceed" id="create-submit">
+            </form>
+        </div>
+<%} else { %>
+    <div class="create">
+        <form action="/review" method="post">
+            <label for="title"><h2>Title</h2></label>
+            <input type="text" name="title" placeholder="Enter books title" id="create-title" required autocomplete="off">
+            <label for="isbn"><h2>ISBN</h2></label>
+            <input type="text" name="isbn" placeholder="Enter ISBN" id="create-isbn" required autocomplete="off">
+            <label for="review_blog"><h2>Review</h2></label>
+            <textarea name="review_blog" placeholder="Type your review here" id="create-review_blog" required autocomplete="off"></textarea>
+            <label for="review_score"><h2>Review score</h2></label>
+            <input type="number" name="review_score" min="00" max="10" pattern="[0-9]{2}" placeholder="0-10" id="create-review_score" required autocomplete="off">
+            <input type="submit" value="Proceed" id="create-submit">
+        </form>
+    </div>
+<% } %>
+</div>
+</main>
+<script>
+    /*
+    What this part does 
+    Resize the text area for big review blog posts. 
+    **/
+    const textArea = document.querySelector('textarea');
+
+    function handleResize(){
+        this.style.height = 'auto'
+        this.style.height = this.scrollHeight +'px'
+    }
+    textArea.addEventListener('input','handleResize')
+</script>
+
+<%- include("partials/footer.ejs") %>
+

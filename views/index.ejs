@@ -1,0 +1,93 @@
+<!-- 
+What do I want this project to do
+
+A websever that stores which books I've read -- Done
+Allows me to write a review on each book -- Done 
+Allows me to update reviews on each book -- Done -- error here. I need to delete the old one then add the new one
+Allows me to delete a book entry completely -- Done with a confirm button 
+Lets me give each book I've read a score -- Done
+Able to sort the books by highest score -- I've got a problem here. I can't seem to work out why this doesn't work. 
+It filters but gives a incorrect order? Seems to be an issue with the type perhaps? 
+
+Views able to leave comments on book posts Would need login functionality to do this properly.-- This is the next chapter to learn about
+Thumbs up or Thumbs down on reviews -- Pass
+
+    This can be done through databases 
+    When I'm creating them online, I would need a text editor to go along with the app Tinymce? Could that work -- Unnecessary
+
+    API Calls
+Provides links to where to get this book from (Can use Amazon?) --Done 
+Makes an API call to get the image of the book cover open libry does this https://openlibrary.org/dev/docs/api/covers -- Done
+
+Use .env to keep details safe. -- Done
+
+-->
+<%- include("partials/header.ejs") %>
+
+<section><!--Header Video Title-->
+
+</section>   
+    <main>
+<Section><!--First feature/Intro-->
+        <div class="firstfeature">
+    <h2>Welcome to my book review website</h2> 
+    <p>
+        This is a website all about books review. Specifically about books that I've read.
+        This website is going to put together what I've learnt so far in the Udemy Full-Stack course. 
+        What I'm going to use is 
+    </p>       
+    <ul>
+        <li>PostgresSQL</a></li>
+        <li>API calls</a></li>
+        <li>Using .env to secure data</a></li>
+        <li>Using CSS without BootStrap</a></li>
+    </ul>
+</div>
+</Section>
+<section><!--BookReviews -->
+<% if (locals.review){ %>
+<div class="main-container">
+    <div class="filter-buttons">
+        <form action="/filterLanding" method="post">
+            <input name="order" value="DESC" hidden>
+            <button type="submit" name="filter" value="review.review_score"><img src="/svg/filter.svg" alt="Filter Button" class="icon">By Review Score</button>
+        </form>
+        <form action="/filterLanding" method="post">
+            <input name="order" value="DESC" hidden>
+            <button type="submit" name="filter" value="book_read.id"><img src="/svg/filter.svg" alt="Filter Button" class="icon">Most Recent</button>
+        </form>
+        
+    </div>
+<% review.forEach(review => { %>
+    <div class="main"> 
+    <img src="https://covers.openlibrary.org/b/isbn/<%=review.isbn%>-M.jpg">
+        <h2><%=review.title%></h2>
+        <p><%-review.review_blog.replace(/\r\n/g, '<br>')%></p>
+        <p>Score: <%=review.review_score%>/10</p>
+    
+    <form class="delete-form" action="/delete" method="post">
+        <input type="hidden" name="id" value="<%=review.id%>">
+        <button type="submit" name="Delete" value="Delete" onclick="return confirm('Are you sure you want to delete this item?');"><img src="/svg/delete.svg" alt="Delete button" class="icon">Delete</button>
+    </form>
+    <a href="https://www.amazon.com/dp/<%=review.isbn%>/">Amazon</a>
+  </div>
+    <%}); %>
+</div>
+    <%} else { %>
+        <div class="emptyContainer">
+            <h2>Lots of reviews to come!</h2>
+            <p>
+                Stay tuned! One of two things has happened. 
+                1- There has been an error in getting the reviews from the server
+                2- There aren't any reviews at the moment!
+                Either way, I'm working hard...or not...to get this personal project back up and running.
+            </p>
+        </div>
+        <%} %>
+   
+</section>
+</main> 
+</body>
+</html>
+
+<%- include("partials/footer.ejs") %>
